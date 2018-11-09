@@ -1,2 +1,2 @@
 # bigfatshort
-How accurate are [x,y,z] at calling stock shorts?
+How good are [x,y,z] famous short-sellers at calling stock shorts?
