@@ -1,6 +1,7 @@
 https://github.com/boscacci/mod-1-proj/
 
-Querying BLS Data:
-https://www.bls.gov/help/hlpforma.htm#CX
-https://www.bls.gov/developers/
-(There is some example code for this in repo)
+Querying BLS CX Data:
+1. https://www.bls.gov/help/hlpforma.htm#CX
+2. https://download.bls.gov/pub/time.series/cx/cx.item
+3. https://download.bls.gov/pub/time.series/cx/cx.demographics
+4. https://download.bls.gov/pub/time.series/cx/cx.characteristics
