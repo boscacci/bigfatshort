@@ -1,0 +1,6 @@
+https://github.com/boscacci/mod-1-proj/
+
+Querying BLS Data:
+https://www.bls.gov/help/hlpforma.htm#CX
+https://www.bls.gov/developers/
+(There is some example code for this in repo)
