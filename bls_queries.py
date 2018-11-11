@@ -2,11 +2,11 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from subscripts import bls_api_query_app as BLS
-import pdb
+import pdb, json
 
 Base = declarative_base()
 
-BLS_API_KEY = '5d111c391937452b82d6878bbb76783c'
+BLS_API_KEY = '9452301636e9423cac8ae92d442161df'
 
 # A year has many consumer demographics
 # A consumer demographic has many expenditures
@@ -14,7 +14,7 @@ BLS_API_KEY = '5d111c391937452b82d6878bbb76783c'
 # A consumer demographic belongs to a year
 
 def get_bls_row(query_code):
-    df = BLS.get_series([query_code], 2003, 2017, BLS_API_KEY)
+    df = BLS.get_series([query_code], 2002, 2012, BLS_API_KEY)
     print('\n')
     years = [year.year for year in df.axes[0]]
     values = [year[0] for year in df.values]
@@ -25,7 +25,12 @@ def get_bls_row(query_code):
 def get_expenditure_by_education(item_code, edu_level, year):
     query_code = 'CXU' + item_code + 'LB13' + edu_level +'M'
     toops = get_bls_row(query_code)
-    return [toop[1] for toop in toops if int(toop[0]) == year][0]
+    newList = []
+    try:
+        newList.append([toop[1] for toop in toops if int(toop[0]) == year][0])
+    except IndexError:
+        pass
+    return newList
 
 #############################################################
 
@@ -55,11 +60,9 @@ class Expense(Base):
 categories = ['HOUSING', 'FOODHOME', 'FOODAWAY', 'HEALTH', 'ALCBEVG', 'APPAREL', 'TRANS', 'ENTRTAIN']
 # takes a year and a edu_level and returns list of all expenses
 def get_all_expenses_for_ed_and_year(edu_level, year):
-    expenses = []
+    expenses = {}
     for category in categories:
-        expense = get_expenditure_by_education(category, edu_level, year)
-        expenses.append(expense)
-    expenses = list(zip(categories,expenses))
+        expenses[category] = get_expenditure_by_education(category, edu_level, year)
     return expenses
 
 ####################
@@ -74,12 +77,15 @@ def get_all_expenses_all_levels(year):
     return all_levels
 
 ####################
-def get_all_data_all_years():
+def get_all_data_all_years(start, end):
     alldata_allyears = {}
-    for year in range(2005,2008):
+    for year in range(start,end):
         alldata_allyears[year] = get_all_expenses_all_levels(year)
     return alldata_allyears
 
-data = get_all_data_all_years()
+data = get_all_data_all_years(2002,2012)
+
+with open('BLM_data.json', 'w') as BLM_data:
+    json.dump(data, BLM_data)
 
 
