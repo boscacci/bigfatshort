@@ -34,26 +34,26 @@ def get_expenditure_by_education(item_code, edu_level, year):
 
 #############################################################
 
-class Year(Base):
-    __tablename__ = 'years'
-    id = Column(Integer, primary_key = True)
-    year = Column(Integer)
-    demographics = relationship('Demographic', back_populates='years')
+# class Year(Base):
+#     __tablename__ = 'years'
+#     id = Column(Integer, primary_key = True)
+#     year = Column(Integer)
+#     demographics = relationship('Demographic', back_populates='years')
 
-class Demographic(Base):
-    __tablename__ = 'demographics'
-    id = Column(Integer, primary_key = True)
-    year_id = Column(Integer, ForeignKey('years.id'))
-    edu_level = Column(Text)
-    expenses = relationship('Expense', back_populates='demographic')
-    years = relationship('Year', back_populates='demographics')
+# class Demographic(Base):
+#     __tablename__ = 'demographics'
+#     id = Column(Integer, primary_key = True)
+#     year_id = Column(Integer, ForeignKey('years.id'))
+#     edu_level = Column(Text)
+#     expenses = relationship('Expense', back_populates='demographic')
+#     years = relationship('Year', back_populates='demographics')
 
-class Expense(Base):
-    __tablename__ = 'expenses'
-    id = Column(Integer, primary_key = True)
-    category = Column(Text)
-    demographic_id = Column(Integer, ForeignKey('demographics.id'))
-    demographic = relationship('Demographic', back_populates='expenses')
+# class Expense(Base):
+#     __tablename__ = 'expenses'
+#     id = Column(Integer, primary_key = True)
+#     category = Column(Text)
+#     demographic_id = Column(Integer, ForeignKey('demographics.id'))
+#     demographic = relationship('Demographic', back_populates='expenses')
 
 ################
 
@@ -68,7 +68,7 @@ def get_all_expenses_for_ed_and_year(edu_level, year):
 ####################
 
 def get_all_expenses_all_levels(year):
-    ed_level_labels = ['sub_hs', 'high_school', 'AD', 'BD', 'MA+']
+    # ed_level_labels = ['sub_hs', 'high_school', 'AD', 'BD', 'MA+']
     ed_levels = ['03', '04', '06', '08', '09']
     all_levels = {}
     for ed_level in ed_levels:
@@ -88,4 +88,4 @@ data = get_all_data_all_years(2002,2012)
 with open('BLM_data.json', 'w') as BLM_data:
     json.dump(data, BLM_data)
 
-
+#### This script makes so many gosh darn requests, we filed for many API keys with many fake email addys
