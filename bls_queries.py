@@ -9,4 +9,4 @@ s2 = 'CXURNTDWELLLB0809M' # avg spending on rent: rural renters
 s3 = 'CXUTRANSLB0806M' # avg spending on transpo: urban renters
 s4 = 'CXUTRANSLB0809M' # avg spending on transpo: rural renters
 
-series = BLS.get_series([s1, s2, s3, s4], 1980, 2017, BLS_API_KEY)
+series = BLS.get_series([s3, s4], 1980, 2017, BLS_API_KEY)
