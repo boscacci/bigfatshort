@@ -8,8 +8,6 @@ from __future__ import (print_function, division, absolute_import,
 import collections
 import datetime
 import logging
-
-
 import os
 import requests
 import pandas as pd
