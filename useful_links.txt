@@ -1,5 +1,7 @@
 https://github.com/boscacci/mod-1-proj/
 
+By Housing Tenure: https://www.bls.gov/cex/2017/combined/tenure.pdf
+
 Querying BLS CX Data:
 1. https://www.bls.gov/help/hlpforma.htm#CX
 2. https://download.bls.gov/pub/time.series/cx/cx.item
