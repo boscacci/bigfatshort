@@ -5,8 +5,8 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 app = Flask(__name__)
 
-with open('BLM_data.json') as BLM_data:
-    data = json.load(BLM_data)
+with open('BLS_data.json') as BLS_data:
+    data = json.load(BLS_data)
 
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///BLS_data.db'

@@ -6,7 +6,7 @@ import pdb, json
 
 Base = declarative_base()
 
-BLS_API_KEY = '9452301636e9423cac8ae92d442161df'
+BLS_API_KEY = '72a1e58047ab47f49ad31306a90aa0b8'
 
 # A year has many consumer demographics
 # A consumer demographic has many expenditures
@@ -22,8 +22,8 @@ def get_bls_row(query_code):
 
 #############################################################
 
-def get_expenditure_by_education(item_code, edu_level, year):
-    query_code = 'CXU' + item_code + 'LB13' + edu_level +'M'
+def get_expenditure_by_demo_code(item_code, demo_code, decile, year):
+    query_code = 'CXU' + item_code + demo_code + decile +'M'
     toops = get_bls_row(query_code)
     newList = []
     try:
@@ -57,23 +57,33 @@ def get_expenditure_by_education(item_code, edu_level, year):
 
 ################
 
-categories = ['HOUSING', 'FOODHOME', 'FOODAWAY', 'HEALTH', 'ALCBEVG', 'APPAREL', 'TRANS', 'ENTRTAIN']
+categories = ['INCAFTTX', 'HOUSING', 'FOODHOME', 'FOODAWAY', 'HEALTH', 'ALCBEVG', 'APPAREL', 'TRANS', 'ENTRTAIN']
 # takes a year and a edu_level and returns list of all expenses
-def get_all_expenses_for_ed_and_year(edu_level, year):
+
+def get_all_expenses_for_demo_and_year(demo_code, decile, year):
     expenses = {}
     for category in categories:
-        expenses[category] = get_expenditure_by_education(category, edu_level, year)
+        expenses[category] = get_expenditure_by_demo_code(category, demo_code, decile, year)
     return expenses
 
 ####################
 
 def get_all_expenses_all_levels(year):
+    
+    demo_code = 'LB13'
+    levels = ['03', '04', '06', '08', '09'] # edu_levels
     # ed_level_labels = ['sub_hs', 'high_school', 'AD', 'BD', 'MA+']
-    ed_levels = ['03', '04', '06', '08', '09']
+    
+    # levels = ['02','03','04','05','06'] # income_deciles
+    # demo_code = 'LB01'
+    
+    # levels = ['03','04','05'] # housing_levels
+    # demo_code = 'LB08'
+    
     all_levels = {}
-    for ed_level in ed_levels:
-        expenses = get_all_expenses_for_ed_and_year(ed_level, year)
-        all_levels[ed_level] = expenses
+    for level in levels:
+        expenses = get_all_expenses_for_demo_and_year(demo_code,level, year)
+        all_levels[level] = expenses
     return all_levels
 
 ####################
@@ -85,7 +95,7 @@ def get_all_data_all_years(start, end):
 
 data = get_all_data_all_years(2002,2012)
 
-with open('BLM_data.json', 'w') as BLM_data:
-    json.dump(data, BLM_data)
+with open('BLS_data_edu.json', 'w') as BLS_data:
+    json.dump(data, BLS_data)
 
 #### This script makes so many gosh darn requests, we filed for many API keys with many fake email addys
