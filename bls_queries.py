@@ -6,7 +6,7 @@ import pdb, json
 
 Base = declarative_base()
 
-BLS_API_KEY = '72a1e58047ab47f49ad31306a90aa0b8'
+BLS_API_KEY = 'c4aceae070ec4aa88bd85a9323947770'
 
 # A year has many consumer demographics
 # A consumer demographic has many expenditures
@@ -70,15 +70,15 @@ def get_all_expenses_for_demo_and_year(demo_code, decile, year):
 
 def get_all_expenses_all_levels(year):
     
-    demo_code = 'LB13'
-    levels = ['03', '04', '06', '08', '09'] # edu_levels
+    # demo_code = 'LB13'
+    # levels = ['03', '04', '06', '08', '09'] # edu_levels
     # ed_level_labels = ['sub_hs', 'high_school', 'AD', 'BD', 'MA+']
     
-    # levels = ['02','03','04','05','06'] # income_deciles
+    # levels = ['02','03','04','05','06'] # income_quants
     # demo_code = 'LB01'
     
-    # levels = ['03','04','05'] # housing_levels
-    # demo_code = 'LB08'
+    levels = ['03','04','05'] # housing_levels
+    demo_code = 'LB08'
     
     all_levels = {}
     for level in levels:
@@ -95,7 +95,7 @@ def get_all_data_all_years(start, end):
 
 data = get_all_data_all_years(2002,2012)
 
-with open('BLS_data_edu.json', 'w') as BLS_data:
+with open('BLS_data_housing.json', 'w') as BLS_data:
     json.dump(data, BLS_data)
 
 #### This script makes so many gosh darn requests, we filed for many API keys with many fake email addys
