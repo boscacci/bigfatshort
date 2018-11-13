@@ -1,0 +1,11 @@
+<h3>Username: {{ user.username }}</h3>
+<p>ID: {{ user.id }}</p>
+<h4>Tweets:</h4>
+<ul>
+{% for tweet in user.tweets %}
+    <li>
+        <p>User ID: {{ tweet.user_id }}</p>
+        <p>Content: {{ tweet.text }}</p>
+    </li>
+{% endfor %}
+</ul>
