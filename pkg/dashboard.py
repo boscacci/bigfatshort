@@ -13,7 +13,7 @@ edu_level_labels = ['No Diploma', 'HS Diploma', 'Associates', 'Bachelors', 'Mast
 zipped_edus = list(zip(edu_level_labels, edu_levels))
 edu_dict = dict(zip(edu_levels, edu_level_labels))
 
-expense_cats = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain']
+expense_cats = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain', 'gdp_percap']
 
 app.layout = html.Div([
     html.Div([
@@ -61,25 +61,39 @@ def update_graph(expense_1, expense_2, checkboxes):
     years = list(range(2002,2013))
 
     traces = []
-
+    name1 = ''
+    name2 = ''
     for edu_level in checkboxes:
+        
+        if expense_1 == 'gdp_percap':
+            y1 = [item[1] for item in By_Edu.query.join(GDP_Percap, By_Edu.year == GDP_Percap.year).add_columns(GDP_Percap.gdp).filter(By_Edu.edu_level == edu_level).all()]
+            name1 = "GDP_Percap"
+        else:
+            y1 = [getattr(item, expense_1) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()]
+        
+        if expense_2 == 'gdp_percap':
+            y2 = [item[1] for item in By_Edu.query.join(GDP_Percap, By_Edu.year == GDP_Percap.year).add_columns(GDP_Percap.gdp).filter(By_Edu.edu_level == edu_level).all()]
+            name2 = "GDP_Percap"
+        else:
+            y2= [getattr(item, expense_2) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()]
+                
         trace = [go.Scatter(
             x = years,
-            y = [getattr(item, expense_1) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()],
+            y = y1,
             line=dict(
                 shape='spline',
                 smoothing = 1.2
                 ),
-            name = f'{edu_dict[edu_level]} {expense_1}'
+            name = name1 or f'{edu_dict[edu_level]} {expense_1}'
         ),
                 go.Scatter(
             x = years,
-            y = [getattr(item, expense_2) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()],
+            y = y2,
             line=dict(
                 shape='spline',
                 smoothing = 1.2
                 ),
-            name = f'{edu_dict[edu_level]} {expense_2}'
+            name = name2 or f'{edu_dict[edu_level]} {expense_2}'
         )]
 
         traces.extend(trace)
