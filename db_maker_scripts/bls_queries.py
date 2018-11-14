@@ -32,31 +32,6 @@ def get_expenditure_by_demo_code(item_code, demo_code, decile, year):
         pass
     return newList
 
-#############################################################
-
-# class Year(Base):
-#     __tablename__ = 'years'
-#     id = Column(Integer, primary_key = True)
-#     year = Column(Integer)
-#     demographics = relationship('Demographic', back_populates='years')
-
-# class Demographic(Base):
-#     __tablename__ = 'demographics'
-#     id = Column(Integer, primary_key = True)
-#     year_id = Column(Integer, ForeignKey('years.id'))
-#     edu_level = Column(Text)
-#     expenses = relationship('Expense', back_populates='demographic')
-#     years = relationship('Year', back_populates='demographics')
-
-# class Expense(Base):
-#     __tablename__ = 'expenses'
-#     id = Column(Integer, primary_key = True)
-#     category = Column(Text)
-#     demographic_id = Column(Integer, ForeignKey('demographics.id'))
-#     demographic = relationship('Demographic', back_populates='expenses')
-
-################
-
 categories = ['INCAFTTX', 'HOUSING', 'FOODHOME', 'FOODAWAY', 'HEALTH', 'ALCBEVG', 'APPAREL', 'TRANS', 'ENTRTAIN']
 # takes a year and a edu_level and returns list of all expenses
 

@@ -14,14 +14,17 @@ zipped_edus = list(zip(edu_level_labels, edu_levels))
 edu_dict = dict(zip(edu_levels, edu_level_labels))
 
 expense_cats = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain']
-# expense_cats_no_gdp = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain']
+expense_labels = ['Total Income', 'Housing', 'Food at Home', 'Food Away from Home', 'Healthcare', 'Alcoholic Bevg', 'Apparel', 'Transportation', 'Entertainment']
+
+expense_cats_zipped = list(zip(expense_cats,expense_labels))
 
 app.layout = html.Div([
     html.Div([
+
         html.Div([
             dcc.Dropdown(
                 id='expense_1',
-                options=[{'label': i, 'value': i} for i in expense_cats],
+                options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
                 value='expense_1'
             ),
         ],style={'width': '48%', 'display': 'inline-block'}),
@@ -29,7 +32,7 @@ app.layout = html.Div([
         html.Div([
             dcc.Dropdown(
                 id='expense_2',
-                options=[{'label': i, 'value': i} for i in expense_cats],
+                options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
                 value='expense_2'
             ),
         ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
@@ -71,9 +74,9 @@ app.layout = html.Div([
      dash.dependencies.Input('expense_2', 'value')])
     
 def update_graph(checkboxes, gdp, expense_1, expense_2):
-    years = list(range(2002,2013))
+    years = list(range(2002,2012))
     traces = []
-    # pdb.set_trace()
+    edu_level = '03'
     for edu_level in checkboxes:  
         if expense_2 == 'expense_2':
             y1 = [getattr(item, expense_1) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()]
@@ -122,6 +125,9 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
             )]
             traces.extend(trace)
 
+    if len(checkboxes) == 0:
+        traces = []
+
     if gdp:
         y1 = [item[1] for item in By_Edu.query.join(GDP_Percap, By_Edu.year == GDP_Percap.year).add_columns(GDP_Percap.gdp).filter(By_Edu.edu_level == edu_level).all()]
         name1 = "GDP_Percap"
@@ -135,7 +141,6 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
             name = name1
         )]
         traces.extend(trace)
-        
 
     return {
         'data': traces,
@@ -143,13 +148,10 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
         'layout': go.Layout(
             xaxis={
                 'title': 'Year',
-                # 'type': 'linear' if xaxis_type == 'Linear' else 'log'
             },
             yaxis={
                 'title': 'USD',
-                # 'type': 'linear' if yaxis_type == 'Linear' else 'log'
             },
-            # margin={'l': 40, 'b': 40, 't': 10, 'r': 0},
             hovermode='closest',
             height = 600
         )
