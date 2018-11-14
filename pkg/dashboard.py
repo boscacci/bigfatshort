@@ -7,17 +7,20 @@ from pkg import app
 from pkg.models import *
 import pdb
 
-# edu_levels = ['03','04','06','08','09']
+edu_levels = ['03','04','06','08','09']
+edu_level_labels = ['No Diploma', 'HS Diploma', 'Associates', 'Bachelors', 'Masters / Dr.']
+
+zipped_edus = list(zip(edu_level_labels, edu_levels))
+
 expense_cats = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain']
 
 app.layout = html.Div([
     html.Div([
-
         html.Div([
             dcc.Dropdown(
                 id='expense_1',
                 options=[{'label': i, 'value': i} for i in expense_cats],
-                value='Year'
+                value='expense_1'
             ),
         ],style={'width': '48%', 'display': 'inline-block'}),
 
@@ -25,43 +28,64 @@ app.layout = html.Div([
             dcc.Dropdown(
                 id='expense_2',
                 options=[{'label': i, 'value': i} for i in expense_cats],
-                value='USD'
+                value='expense_2'
             ),
-
         ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
     ]),
 
-    dcc.Graph(id='indicator-graphic'),
+    html.Div([
 
-    # dcc.Slider(
-    #     id='year--slider',
-    #     min=df['Year'].min(),
-    #     max=df['Year'].max(),
-    #     value=df['Year'].max(),
-    #     marks={str(year): str(year) for year in df['Year'].unique()}
-    # )
+        html.Div([
+            dcc.Graph(id='indicator-graphic')
+        ],style={'width': '90%', 'float': 'left', 'display': 'inline-block'}),
+
+        html.Div([
+            dcc.Checklist(
+                id = 'checkboxes',
+                options=[{'label': i[0], 'value': i[1]} for i in zipped_edus],
+                values=[],
+        style={'width': '10%', 'float': 'right', 'display': 'inline-block'})
+
+        ])
+    ])
 ])
 
 @app.callback(
     dash.dependencies.Output('indicator-graphic', 'figure'),
     [dash.dependencies.Input('expense_1', 'value'),
-     dash.dependencies.Input('expense_2', 'value')])
-     # dash.dependencies.Input('xaxis-type', 'value'),
-     # dash.dependencies.Input('yaxis-type', 'value')])
-     # dash.dependencies.Input('year--slider', 'value')])
-def update_graph(expense_1, expense_2):
-    # dff = df[df['Year'] == year_value]
+     dash.dependencies.Input('expense_2', 'value'),#])
+     dash.dependencies.Input('checkboxes', 'values')])
+    
+def update_graph(expense_1, expense_2, checkboxes):
     years = list(range(2002,2013))
-    return {
-        'data': [go.Scatter(
+
+    traces = []
+
+    for edu_level in checkboxes:
+        trace = [go.Scatter(
             x = years,
-            y = [getattr(item, expense_1) for item in By_Edu.query.filter(By_Edu.edu_level == '03').all()],
-            # text = dff[dff['Indicator Name'] == yaxis_column_name]['Country Name'],
+            y = [getattr(item, expense_1) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()],
             line=dict(
                 shape='spline',
                 smoothing = 1.2
-                )
-        )],
+                ),
+            name = f'{edu_level} {expense_1}'
+        ),
+                go.Scatter(
+            x = years,
+            y = [getattr(item, expense_2) for item in By_Edu.query.filter(By_Edu.edu_level == edu_level).all()],
+            line=dict(
+                shape='spline',
+                smoothing = 1.2
+                ),
+            name = expense_2
+        )]
+
+        traces.extend(trace)
+
+    return {
+        'data': traces,
+
         'layout': go.Layout(
             xaxis={
                 'title': 'Year',
