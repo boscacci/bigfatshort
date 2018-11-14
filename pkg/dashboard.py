@@ -11,6 +11,7 @@ edu_levels = ['03','04','06','08','09']
 edu_level_labels = ['No Diploma', 'HS Diploma', 'Associates', 'Bachelors', 'Masters / Dr.']
 
 zipped_edus = list(zip(edu_level_labels, edu_levels))
+edu_dict = dict(zip(edu_levels, edu_level_labels))
 
 expense_cats = ['income', 'housing', 'foodhome','foodaway','health','alcbevg','apparel','trans','entrtain']
 
@@ -69,7 +70,7 @@ def update_graph(expense_1, expense_2, checkboxes):
                 shape='spline',
                 smoothing = 1.2
                 ),
-            name = f'{edu_level} {expense_1}'
+            name = f'{edu_dict[edu_level]} {expense_1}'
         ),
                 go.Scatter(
             x = years,
@@ -78,7 +79,7 @@ def update_graph(expense_1, expense_2, checkboxes):
                 shape='spline',
                 smoothing = 1.2
                 ),
-            name = expense_2
+            name = f'{edu_dict[edu_level]} {expense_2}'
         )]
 
         traces.extend(trace)
