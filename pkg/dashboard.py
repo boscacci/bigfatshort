@@ -19,51 +19,88 @@ expense_labels = ['Total Income', 'Housing', 'Food at Home', 'Food Away from Hom
 expense_cats_zipped = list(zip(expense_cats,expense_labels))
 
 app.layout = html.Div([
-    html.Div([
-
-        html.Div([
-            dcc.Dropdown(
-                id='expense_1',
-                options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
-                value='expense_1'
-            ),
-        ],style={'width': '48%', 'display': 'inline-block'}),
-
-        html.Div([
-            dcc.Dropdown(
-                id='expense_2',
-                options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
-                value='expense_2'
-            ),
-        ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
-    ]),
-
+    
     html.Div([
         
-        html.P(['Education Categories'],style={'float': 'right'}),
+        html.Div([
+            html.H4([
+                'Spending by Expense Type and Education Level'
+                ], style={'text-align':'center'})
+            ]),
 
         html.Div([
-            dcc.Graph(id='indicator-graphic')
-        ],style={'width': '90%', 'float': 'left', 'display': 'inline-block'}),
+            
+            html.P(['Education Categories:'],style={'float': 'right'}),
+
+            html.Div([
+                dcc.Graph(id='indicator-graphic')
+            ],style={'width': '90%', 'float': 'left', 'display': 'inline-block'}),
+
+            html.Div([
+                dcc.Checklist(
+                    id = 'checkboxes',
+                    options=[{'label': i[0], 'value': i[1]} for i in zipped_edus],
+                    values=[],
+            style={'width': '10%', 'float': 'right', 'display': 'inline-block'})
+            ]),
+
+            html.P(['Other Data:'],style={'float': 'right'}),
+
+            html.Div([
+                dcc.Checklist(
+                    id = 'gdp',
+                    options=[{'label': 'GDP Per Capita', 'value': 'gdp_percap'}],
+                    values=[],
+            style={'width': '10%', 'float': 'right', 'display': 'inline-block'})
+            ])
+        ])]),
+
+    html.Div([
 
         html.Div([
-            dcc.Checklist(
-                id = 'checkboxes',
-                options=[{'label': i[0], 'value': i[1]} for i in zipped_edus],
-                values=[],
-        style={'width': '10%', 'float': 'right', 'display': 'inline-block'})
+                html.H6([
+                    'Expense Categories:'
+                    ], style={'text-align':'center','display': 'inline-block'})
+            ],style={'text-align':'center', 'display': 'inline-block'}),
+
+        html.Div([
+            html.Div([
+                dcc.Dropdown(
+                    id='expense_1',
+                    options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
+                    value='expense_1'
+                ),
+                ],style={'width': '48%', 'display': 'inline-block'}),
+
+            html.Div([
+                dcc.Dropdown(
+                    id='expense_2',
+                    options=[{'label': i[1], 'value': i[0]} for i in expense_cats_zipped],
+                    value='expense_2'
+                ),
+            ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
         ]),
 
-        html.P(['Other Filter'],style={'float': 'right'}),
+        html.Div([
+                
+                html.P([
+                    'From the Bureau of Labor Statistics Consumer Expenditure Survey.'
+                    ], style={'text-align':'center','display': 'inline-block'}),
+
+        ], style={'text-align':'center','display': 'inline-block'}),
 
         html.Div([
-            dcc.Checklist(
-                id = 'gdp',
-                options=[{'label': 'GDP Per Capita', 'value': 'gdp_percap'}],
-                values=[],
-        style={'width': '10%', 'float': 'right', 'display': 'inline-block'})
-        ])
-    ])
+                
+                html.P([''' 
+                    Y-values reflect the average annual expenditures of a consumer unit, 
+                    which is on average 2.5 people.
+                        '''
+                    ],style={'text-align':'center','display': 'inline-block'})
+
+            ],style={'text-align':'center','display': 'inline-block'})
+
+    ],style={'text-align':'center'})
+
 ])
 
 @app.callback(
@@ -87,7 +124,7 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
                     shape='spline',
                     smoothing = 1.2
                     ),
-                name = f'{edu_dict[edu_level]} {expense_1}'
+                name = '%s %s' % (edu_dict[edu_level],expense_1)
             )]
             traces.extend(trace)
         elif expense_1 == 'expense_1':
@@ -99,7 +136,7 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
                     shape='spline',
                     smoothing = 1.2
                     ),
-                name = f'{edu_dict[edu_level]} {expense_2}'
+                name = '%s %s' % (edu_dict[edu_level],expense_2)
             )]
             traces.extend(trace)
         else:
@@ -112,7 +149,7 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
                     shape='spline',
                     smoothing = 1.2
                     ),
-                name = f'{edu_dict[edu_level]} {expense_1}'
+                name = '%s %s' % (edu_dict[edu_level],expense_1)
             ),
                     go.Scatter(
                 x = years,
@@ -121,7 +158,7 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
                     shape='spline',
                     smoothing = 1.2
                     ),
-                name = f'{edu_dict[edu_level]} {expense_2}'
+                name = '%s %s' % (edu_dict[edu_level],expense_2)
             )]
             traces.extend(trace)
 
@@ -153,6 +190,6 @@ def update_graph(checkboxes, gdp, expense_1, expense_2):
                 'title': 'USD',
             },
             hovermode='closest',
-            height = 600
+            height = 500
         )
     }
