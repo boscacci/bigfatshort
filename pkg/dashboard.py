@@ -84,7 +84,7 @@ app.layout = html.Div([
         html.Div([
                 
                 html.P([
-                    'From the Bureau of Labor Statistics Consumer Expenditure Survey.'
+                    ''
                     ], style={'text-align':'center','display': 'inline-block'}),
 
         ], style={'text-align':'center','display': 'inline-block'}),
@@ -92,6 +92,7 @@ app.layout = html.Div([
         html.Div([
                 
                 html.P([''' 
+                    From the Bureau of Labor Statistics Consumer Expenditure Survey. 
                     Y-values reflect the average annual expenditures of a consumer unit, 
                     which is on average 2.5 people.
                         '''
