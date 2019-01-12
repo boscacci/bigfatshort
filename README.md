@@ -1,7 +1,7 @@
 # Consumer Spending by Expense Type and Education Level
 
 ## Project Goal
-The goal of this project was to observe different types of consumer spending relative to their degree of education and GDP per capita from years 2002 to 2012.
+To visualize how people with different levels of education spent their money between 2002 and 2012.
 
 ## Select Income and Housing Expenses for HS and MS/DR degrees
 ![header](images/expense_and_education.png)
