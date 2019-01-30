@@ -1,7 +1,7 @@
 # Consumer Spending by Expense Type and Education Level
 
 ## Project Goal
-To visualize how people with different levels of education spent their money between 2002 and 2012. Learn how to create interactive data visualization dashboards with Flask and Dash python modules.
+To visualize how people with different levels of education spent their money between 2002 and 2012. Created interactive data visualization dashboards with Flask and Dash python modules.
 
 ## Select Income and Housing Expenses for HS and MS/DR degrees
 ![header](images/expense_and_education.png)
